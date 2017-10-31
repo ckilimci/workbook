@@ -13,4 +13,5 @@ typedef int bool;
 struct node* newNode(int);
 void printNode(struct node*);
 bool bfs(struct node*, int);
+void bf_print(struct node*);
 

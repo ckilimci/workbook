@@ -16,8 +16,8 @@ struct node* newNode(int data) {
 
 void printNode(struct node* n) {
 	if (NULL != n) printf("Node: %d\n", n->data);
-	if (NULL != n->left) printf("L: %d\n", n->left->data);
-	if (NULL != n->right) printf("R: %d\n", n->right->data);
+	if (NULL != n->left) printf("   L: %d\n", n->left->data);
+	if (NULL != n->right) printf("   R: %d\n", n->right->data);
 
 }
 
@@ -30,7 +30,6 @@ struct queueNode* queueHead;
 struct queueNode* queueTail;
 
 void appendToQueue(struct node* n) {
-	printNode(n);
 	if (NULL != queueTail) {
 		queueTail->next = (struct queueNode*)malloc(sizeof(struct queueNode)); 
 		queueTail = queueTail->next;
@@ -75,4 +74,24 @@ bool bfs(struct node* node, int s) {
 	}
 	printf("Node did not found!\n");
 	return false;
+}
+
+void bf_print(struct node* node) {
+	appendToQueue(node);
+	struct node* n = getFromQueue();
+	while (n) {
+		printNode(n);
+		if (n->left) appendToQueue(n->left);
+		if (n->right) appendToQueue(n->right);
+		n = getFromQueue();
+	}
+	printf("Done!\n");
+}
+
+void df_print(struct node* node) {
+	if (node) {
+		df_print(node->left);
+		printNode(node);
+		df_print(node->right);
+	}
 }
