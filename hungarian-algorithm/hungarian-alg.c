@@ -3,95 +3,50 @@
 
 #include "hungarian-alg.h"
 
-struct node* newNode(int data) {
-	printf("Creating new node\n");
-	struct node* n = (struct node*)malloc(sizeof(struct node));
-
-	n->data = data;
-	n->left = NULL;
-	n->right = NULL;
-
-	return n;
+void set_table(int *table, int m, int n) {
+	_table = table;
+	_row = m;
+	_col = n;
 }
 
-void printNode(struct node* n) {
-	if (NULL != n) printf("Node: %d\n", n->data);
-	if (NULL != n->left) printf("   L: %d\n", n->left->data);
-	if (NULL != n->right) printf("   R: %d\n", n->right->data);
-
+int* get_table() {
+	return _table;
 }
 
-struct queueNode {
-	struct node* node;
-	struct queueNode* next;
-};
-
-struct queueNode* queueHead;
-struct queueNode* queueTail;
-
-void appendToQueue(struct node* n) {
-	if (NULL != queueTail) {
-		queueTail->next = (struct queueNode*)malloc(sizeof(struct queueNode)); 
-		queueTail = queueTail->next;
-	} else {
-		queueTail = (struct queueNode*)malloc(sizeof(struct queueNode)); 
-	}
-	queueTail->node = n;
-	queueTail->next = NULL;
-	
-	if (NULL == queueHead) queueHead = queueTail;
-}
-struct node* getFromQueue() {
-	if (NULL != queueHead) {
-		struct node* n = queueHead->node;
-		queueHead = queueHead->next;
-		return n;
-	}
+int table(int i, int j) {
+	int *table = get_table();
+	if (table)
+		return *((table+i*_col) + j);
 	return NULL;
 }
 
-void printQueue() {
-	struct queueNode* q = queueHead;
-	while(NULL != q) {
-		printNode(q->node);
-		q = q->next;
+void print_options() {
+	for (int i=0; i<_row; i++) {
+		for (int j=0; j<_col; j++) {
+			printf("%d ",  table(i, j));
+		}
+		printf("\n");
 	}
 }
 
-bool bfs(struct node* node, int s) {
-	printf("BF Searching..\n");
-	appendToQueue(node);
-	struct node* n = getFromQueue();
-	while (NULL != n) {
-		printNode(n);
-		if (n->data == s) {
-			return true;
-		} else {
-			if (NULL != n->left) appendToQueue(n->left);
-			if (NULL != n->right) appendToQueue(n->right);
-		}  
-		n = getFromQueue();
+void pretty_print() {
+	for (int i=0; i<=_col*5; i++) {
+		printf("-");
 	}
-	printf("Node did not found!\n");
-	return false;
+	printf("\n");
+	for (int i=0; i<_row; i++) {
+		for (int j=0; j<_col; j++) {
+			printf("| %2d ",  table(i, j));
+		}
+		printf("|\n");
+	}
+	for (int i=0; i<=_col*5; i++) {
+		printf("-");
+	}
+	printf("\n");
 }
 
-void bf_print(struct node* node) {
-	appendToQueue(node);
-	struct node* n = getFromQueue();
-	while (n) {
-		printNode(n);
-		if (n->left) appendToQueue(n->left);
-		if (n->right) appendToQueue(n->right);
-		n = getFromQueue();
-	}
-	printf("Done!\n");
+void run_hungarian_alg() {
+	
 }
 
-void df_print(struct node* node) {
-	if (node) {
-		df_print(node->left);
-		printNode(node);
-		df_print(node->right);
-	}
-}

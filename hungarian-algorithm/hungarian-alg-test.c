@@ -2,15 +2,17 @@
 
 #include "hungarian-alg.h"
 
+#define number_of_options 2
+#define number_of_candidate 3
+
 int main() {
-	printf("Hello World\n");
-	struct node* root = newNode(10);
 
-	root->left = newNode(5);
-	root->left->right = newNode(7);
-	root->right = newNode(15);
-	root->right->left = newNode(12);
+	int table[number_of_options][number_of_candidate] = {
+		{56, 67, 78},
+		{32, 78, 11}
+	};
 
-	df_print(root);
+	set_table((int *)table, number_of_options, number_of_candidate);
+	pretty_print();
 	return 0;
 }
